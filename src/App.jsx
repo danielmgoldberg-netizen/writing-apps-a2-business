@@ -1,92 +1,146 @@
 import { useState } from "react";
-import PepsiCoBusinessTutor from "./apps/PepsiCoBusinessTutor.jsx";
+import PepsiCoBusinessTutor, { TEACHERS } from "./apps/PepsiCoBusinessTutor.jsx";
 
-// Same macOS tokens as DesktopShell in the main writing-apps project, inlined
-// here because this project has no shared components folder.
-const FONT_STACK = `-apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", system-ui, "Helvetica Neue", Helvetica, Arial, sans-serif`;
-
+// Mirrors the tutor's own look (cream page, Fraunces headings, Plus Jakarta Sans,
+// beige-bordered cards, green accent) so the landing page and tutor feel like one app.
 const appStyles = `
+  @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Plus+Jakarta+Sans:wght@400;500;600&display=swap');
   * { box-sizing: border-box; }
   body { margin: 0; }
 
   .app-screen {
-    --ds-large-title: 26px;
-    --ds-title-2: 17px;
-    --ds-body: 13px;
-    --ds-label: #1D1D1F;
-    --ds-secondary-label: rgba(0, 0, 0, 0.5);
-    --ds-tertiary-label: rgba(0, 0, 0, 0.26);
-    --ds-ease: cubic-bezier(0.25, 0.1, 0.25, 1);
-
     min-height: 100vh;
-    background: #F5F5F7;
-    padding: 72px 20px 60px;
-    font-family: ${FONT_STACK};
-    font-size: var(--ds-body);
-    color: var(--ds-label);
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
+    background: #FAF6ED;
+    padding: 28px 16px 60px;
+    font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+    color: #1F1B16;
   }
   .app-panel {
-    max-width: 520px;
+    max-width: 720px;
     margin: 0 auto;
-    animation: app-fade-in 0.45s var(--ds-ease) both;
+    animation: app-fade-in 0.4s ease both;
   }
   @keyframes app-fade-in {
     from { opacity: 0; transform: translateY(6px); }
     to { opacity: 1; transform: translateY(0); }
   }
 
-  .app-header { text-align: center; margin-bottom: 32px; }
-  .app-icon {
-    width: 64px;
-    height: 64px;
-    margin: 0 auto 16px;
-    border-radius: 15px;
-    background: linear-gradient(180deg, #4AA3FF 0%, #007AFF 100%);
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1), 0 6px 16px rgba(0, 122, 255, 0.25);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 32px;
-  }
+  .app-header { margin: 34px 0 20px; padding-left: 4px; }
   .app-title {
-    font-size: var(--ds-large-title);
-    font-weight: 700;
+    font-family: 'Fraunces', serif;
+    font-size: 30px;
+    font-weight: 500;
     letter-spacing: -0.02em;
-    line-height: 1.2;
+    color: #1F1B16;
     margin: 0;
   }
 
-  /* Exercise menu: list of large, clickable rows */
+  .app-card {
+    background: #FFFFFF;
+    border: 1px solid #E8E0D0;
+    border-radius: 14px;
+    padding: 22px 26px;
+    margin-bottom: 18px;
+  }
+  .app-card-title {
+    font-family: 'Fraunces', serif;
+    font-size: 21px;
+    font-weight: 500;
+    color: #1F1B16;
+    margin: 0 0 12px;
+  }
+  .app-card-subtitle {
+    font-size: 14px;
+    color: #5A4D43;
+    line-height: 1.6;
+    margin: 0 0 18px;
+  }
+
+  .app-field-row { display: flex; gap: 12px; margin-bottom: 14px; flex-wrap: wrap; }
+  .app-field-row > div { flex: 1; min-width: 160px; }
+  .app-label {
+    display: block;
+    font-size: 12px;
+    font-weight: 600;
+    color: #6B5D54;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    margin-bottom: 6px;
+  }
+  .app-input,
+  .app-select {
+    width: 100%;
+    padding: 11px 14px;
+    border: 1.5px solid #DDD2BC;
+    border-radius: 10px;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 15px;
+    color: #1F1B16;
+    background: #FDFAF2;
+    outline: none;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  }
+  .app-input::placeholder { color: #A89B85; }
+  .app-select {
+    cursor: pointer;
+    appearance: none;
+    padding-right: 40px;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'><path fill='%236B5D54' d='M6 8L0 0h12z'/></svg>");
+    background-repeat: no-repeat;
+    background-position: right 16px center;
+  }
+  .app-input:focus,
+  .app-select:focus {
+    border-color: #2D5043;
+    box-shadow: 0 0 0 3px rgba(45, 80, 67, 0.12);
+  }
+
+  .app-section-label {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    color: #6B5D54;
+    margin: 0 4px 8px;
+  }
+  .app-hint {
+    margin: 4px 4px 0;
+    font-size: 13px;
+    color: #6B5D54;
+  }
+
+  /* Exercise menu: large, clickable rows */
   .app-exercise {
     width: 100%;
     display: flex;
     align-items: center;
     gap: 16px;
     margin-bottom: 12px;
-    padding: 18px 20px;
+    padding: 20px 24px;
     text-align: left;
     font-family: inherit;
     color: inherit;
     background: #FFFFFF;
-    border: 0.5px solid rgba(0, 0, 0, 0.1);
-    border-radius: 12px;
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04), 0 4px 14px rgba(0, 0, 0, 0.04);
-    cursor: default;
-    transition: box-shadow 0.2s var(--ds-ease), transform 0.2s var(--ds-ease);
+    border: 1px solid #E8E0D0;
+    border-top: 3px solid #2D5043;
+    border-radius: 14px;
+    cursor: pointer;
+    transition: box-shadow 0.15s ease, transform 0.1s ease, opacity 0.15s ease;
   }
-  .app-exercise:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05), 0 10px 24px rgba(0, 0, 0, 0.08);
+  .app-exercise:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
   }
-  .app-exercise:active { transform: scale(0.99); }
-  .app-exercise:focus-visible { outline: none; box-shadow: 0 0 0 3px rgba(0, 122, 255, 0.35); }
+  .app-exercise:active:not(:disabled) { transform: translateY(0); }
+  .app-exercise:disabled { opacity: 0.55; cursor: not-allowed; }
+  .app-exercise:focus-visible { outline: none; box-shadow: 0 0 0 3px rgba(45, 80, 67, 0.2); }
   .app-exercise-icon {
     width: 48px;
     height: 48px;
     flex-shrink: 0;
-    border-radius: 11px;
+    border-radius: 10px;
+    background: #FDFAF2;
+    border: 1px solid #EDE3CE;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -94,21 +148,27 @@ const appStyles = `
   }
   .app-exercise-body { flex: 1; min-width: 0; }
   .app-exercise-title {
-    font-size: var(--ds-title-2);
-    font-weight: 600;
-    letter-spacing: -0.01em;
-    margin-bottom: 3px;
+    font-family: 'Fraunces', serif;
+    font-size: 21px;
+    font-weight: 500;
+    color: #1F1B16;
+    margin-bottom: 4px;
   }
   .app-exercise-desc {
-    font-size: var(--ds-body);
-    color: var(--ds-secondary-label);
-    line-height: 1.5;
+    font-size: 14.5px;
+    color: #6B5D54;
+    line-height: 1.55;
   }
   .app-chevron {
     flex-shrink: 0;
-    color: var(--ds-tertiary-label);
-    font-size: 22px;
+    color: #2D5043;
+    font-size: 24px;
     line-height: 1;
+  }
+
+  @media (max-width: 600px) {
+    .app-card { padding: 18px 16px; }
+    .app-exercise { padding: 18px 16px; }
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -119,10 +179,22 @@ const appStyles = `
 
 export default function App() {
   const [current, setCurrent] = useState(null);
+  const [firstName, setFirstName] = useState("");
+  const [surname, setSurname] = useState("");
+  const [teacher, setTeacher] = useState("");
 
   if (current === "business") {
-    return <PepsiCoBusinessTutor onBack={() => setCurrent(null)} />;
+    return (
+      <PepsiCoBusinessTutor
+        onBack={() => setCurrent(null)}
+        firstName={firstName.trim()}
+        surname={surname.trim()}
+        teacher={teacher}
+      />
+    );
   }
+
+  const ready = firstName.trim() && surname.trim() && teacher;
 
   return (
     <div className="app-screen">
@@ -130,12 +202,55 @@ export default function App() {
 
       <div className="app-panel">
         <header className="app-header">
-          <div className="app-icon" aria-hidden="true">✍️</div>
-          <h1 className="app-title">Business Writing Practice</h1>
+          <h1 className="app-title">Business Writing Assignment</h1>
         </header>
 
-        <button className="app-exercise" onClick={() => setCurrent("business")}>
-          <div className="app-exercise-icon" style={{ background: "rgba(52, 199, 89, 0.14)" }} aria-hidden="true">📈</div>
+        <section className="app-card">
+          <h2 className="app-card-title">👋 Welcome! Please introduce yourself.</h2>
+          <p className="app-card-subtitle">Fill in all three fields, then choose your exercise below.</p>
+
+          <div className="app-field-row">
+            <div>
+              <label className="app-label" htmlFor="app-first-name">First name</label>
+              <input
+                id="app-first-name"
+                type="text"
+                className="app-input"
+                placeholder="e.g. Yuval"
+                value={firstName}
+                onChange={e => setFirstName(e.target.value)}
+              />
+            </div>
+            <div>
+              <label className="app-label" htmlFor="app-surname">Surname</label>
+              <input
+                id="app-surname"
+                type="text"
+                className="app-input"
+                placeholder="e.g. Cohen"
+                value={surname}
+                onChange={e => setSurname(e.target.value)}
+              />
+            </div>
+          </div>
+
+          <div>
+            <label className="app-label" htmlFor="app-teacher">My teacher is</label>
+            <select
+              id="app-teacher"
+              className="app-select"
+              value={teacher}
+              onChange={e => setTeacher(e.target.value)}
+            >
+              <option value="">Select your teacher…</option>
+              {TEACHERS.map(t => <option key={t} value={t}>{t}</option>)}
+            </select>
+          </div>
+        </section>
+
+        <div className="app-section-label">Exercise</div>
+        <button className="app-exercise" disabled={!ready} onClick={() => setCurrent("business")}>
+          <div className="app-exercise-icon" aria-hidden="true">📈</div>
           <div className="app-exercise-body">
             <div className="app-exercise-title">Business Writing Tutor</div>
             <div className="app-exercise-desc">
@@ -144,6 +259,9 @@ export default function App() {
           </div>
           <span className="app-chevron" aria-hidden="true">›</span>
         </button>
+        {!ready && (
+          <div className="app-hint">Fill in your name and teacher above to start.</div>
+        )}
       </div>
     </div>
   );

@@ -33,7 +33,7 @@ function logToAirtable({ firstName, surname, teacher, attemptNumber, submission,
   }, 0);
 }
 
-const TEACHERS = ["Miriam", "Yohanna", "Rita", "Keren", "Daniel", "Chana", "Louise"];
+export const TEACHERS = ["Miriam", "Yohanna", "Rita", "Keren", "Daniel", "Chana", "Louise"];
 
 // ─────────────────────────────────────────────────────────────────────────────
 // SOURCE MATERIAL
@@ -776,11 +776,14 @@ function CitationGuide() {
 // ─────────────────────────────────────────────────────────────────────────────
 // MAIN APP
 // ─────────────────────────────────────────────────────────────────────────────
-export default function App({ onBack }) {
-  const [firstName, setFirstName] = useState("");
-  const [surname, setSurname] = useState("");
-  const [teacher, setTeacher] = useState("");
-  const [stage, setStage] = useState("welcome"); // welcome | work
+export default function App({ onBack, firstName: initialFirstName = "", surname: initialSurname = "", teacher: initialTeacher = "" }) {
+  const [firstName, setFirstName] = useState(initialFirstName);
+  const [surname, setSurname] = useState(initialSurname);
+  const [teacher, setTeacher] = useState(initialTeacher);
+  // The landing page collects sign-in details, so skip the welcome step when they arrive filled in.
+  const [stage, setStage] = useState(
+    initialFirstName.trim() && initialSurname.trim() && initialTeacher ? "work" : "welcome"
+  ); // welcome | work
 
   const [warmup, setWarmup] = useState({ q1i: "", q1ii: "", q2a: "", q2b: "" });
   const [warmupResult, setWarmupResult] = useState(null);
