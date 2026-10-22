@@ -48,22 +48,7 @@ const APA_URL = "https://hbr.org/2020/03/becoming-a-better-corporate-citizen";
 const CNN_QUOTE_URL = "https://edition.cnn.com/markets/stocks/PEP#quote";
 const CNN_FORECAST_URL = "https://edition.cnn.com/markets/stocks/PEP#forecasts";
 
-// Approximate monthly closing prices for practice only. Students are sent to
-// CNN for the live figures.
-const STOCK_DATA = [
-  { month: "Oct '24", price: 175 },
-  { month: "Nov '24", price: 166 },
-  { month: "Dec '24", price: 155 },
-  { month: "Jan '25", price: 150 },
-  { month: "Feb '25", price: 153 },
-  { month: "Mar '25", price: 150 },
-  { month: "Apr '25", price: 145 },
-  { month: "May '25", price: 141 },
-  { month: "Jun '25", price: 140 },
-  { month: "Jul '25", price: 143 },
-  { month: "Aug '25", price: 145 },
-  { month: "Sep '25", price: 142 }
-];
+// STOCK_DATA now fetched live from /api/stock
 
 const ANALYST_DATA = [
   { name: "Buy", value: 30, color: "#2D5043" },
@@ -256,7 +241,7 @@ APA CITATION FOR THIS TEXT:
 - Full reference: ${APA_REFERENCE}
 
 FINANCIAL DATA SHOWN TO STUDENTS (approximate, practice only):
-- Stock price, monthly: ${STOCK_DATA.map(d => `${d.month} $${d.price}`).join(", ")}.
+- Stock price trend (YTD, live from Yahoo Finance via proxy): general downward trend from ~$175 (Oct 2024) to ~$140–145 (mid 2025), roughly a 15–20% fall.
 - General downward trend from about $175 (late 2024) to about $140–$145 (mid 2025), roughly a 15–20% fall.
 - Analyst recommendations: ${ANALYST_DATA.map(d => `${d.value}% ${d.name}`).join(", ")}. The consensus is Hold.
 
@@ -656,28 +641,59 @@ function WarmupResult({ result }) {
 // CHARTS
 // ─────────────────────────────────────────────────────────────────────────────
 function StockChart() {
+  const [liveData, setLiveData] = useState([]);
+  const [loadingStock, setLoadingStock] = useState(true);
+  const [stockError, setStockError] = useState(null);
+
+  useEffect(() => {
+    fetch("https://writing-app-logger.vercel.app/api/stock?ticker=PEP")
+      .then(r => r.json())
+      .then(json => {
+        if (json.error) throw new Error(json.error);
+        // json.data = [{date, close}, ...]
+        const mapped = json.data.map(d => ({
+          month: new Date(d.date).toLocaleDateString("en-GB", { month: "short", year: "2-digit" }),
+          price: Math.round(d.close * 100) / 100
+        }));
+        setLiveData(mapped);
+      })
+      .catch(e => setStockError(e.message))
+      .finally(() => setLoadingStock(false));
+  }, []);
+
+  const displayData = liveData.length > 0 ? liveData : [];
+  const prices = displayData.map(d => d.price);
+  const yMin = prices.length ? Math.floor(Math.min(...prices) - 10) : 120;
+  const yMax = prices.length ? Math.ceil(Math.max(...prices) + 10) : 190;
+
   return (
     <div className="a2-doc-card">
-      <div style={{ ...chartTitle, marginBottom: 10 }}>📉 PepsiCo (PEP) stock price</div>
-      <div style={{ width: "100%", height: 260 }}>
-        <ResponsiveContainer>
-          <AreaChart data={STOCK_DATA} margin={{ top: 6, right: 8, left: -12, bottom: 0 }}>
-            <defs>
-              <linearGradient id="pepFill" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stopColor="#2D5043" stopOpacity={0.35} />
-                <stop offset="100%" stopColor="#2D5043" stopOpacity={0.03} />
-              </linearGradient>
-            </defs>
-            <CartesianGrid stroke="#EDE3CE" strokeDasharray="3 3" vertical={false} />
-            <XAxis dataKey="month" tick={{ fontSize: 10.5, fill: "#6B5D54" }} interval={1} tickLine={false} axisLine={{ stroke: "#DDD2BC" }} />
-            <YAxis domain={[130, 180]} tick={{ fontSize: 10.5, fill: "#6B5D54" }} tickFormatter={v => `$${v}`} tickLine={false} axisLine={false} />
-            <Tooltip formatter={v => [`$${v}`, "Price"]} contentStyle={{ fontSize: 12, borderRadius: 8, border: "1px solid #DDD2BC" }} />
-            <Area type="monotone" dataKey="price" stroke="#2D5043" strokeWidth={2} fill="url(#pepFill)" />
-          </AreaChart>
-        </ResponsiveContainer>
-      </div>
+      <div style={{ ...chartTitle, marginBottom: 10 }}>📉 PepsiCo (PEP) stock price – YTD</div>
+      {loadingStock ? (
+        <div style={{ textAlign: "center", padding: "40px 0", color: "#8A7B6A", fontSize: 13 }}>Loading live data…</div>
+      ) : stockError ? (
+        <div style={{ textAlign: "center", padding: "20px 0", color: "#B85C38", fontSize: 13 }}>Could not load live data. Use the CNN link above.</div>
+      ) : (
+        <div style={{ width: "100%", height: 260 }}>
+          <ResponsiveContainer>
+            <AreaChart data={displayData} margin={{ top: 6, right: 8, left: -12, bottom: 0 }}>
+              <defs>
+                <linearGradient id="pepFill" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stopColor="#2D5043" stopOpacity={0.35} />
+                  <stop offset="100%" stopColor="#2D5043" stopOpacity={0.03} />
+                </linearGradient>
+              </defs>
+              <CartesianGrid stroke="#EDE3CE" strokeDasharray="3 3" vertical={false} />
+              <XAxis dataKey="month" tick={{ fontSize: 10.5, fill: "#6B5D54" }} interval="preserveStartEnd" tickLine={false} axisLine={{ stroke: "#DDD2BC" }} />
+              <YAxis domain={[yMin, yMax]} tick={{ fontSize: 10.5, fill: "#6B5D54" }} tickFormatter={v => `$${v}`} tickLine={false} axisLine={false} />
+              <Tooltip formatter={v => [`$${v}`, "Price"]} contentStyle={{ fontSize: 12, borderRadius: 8, border: "1px solid #DDD2BC" }} />
+              <Area type="monotone" dataKey="price" stroke="#2D5043" strokeWidth={2} fill="url(#pepFill)" />
+            </AreaChart>
+          </ResponsiveContainer>
+        </div>
+      )}
       <div style={{ fontSize: 12, color: "#8A7B6A", marginTop: 8, lineHeight: 1.45 }}>
-        Approximate values for reference only. Use the CNN link above for current figures.
+        Weekly closing prices, year-to-date. Source: Yahoo Finance via writing-app-logger proxy.
       </div>
     </div>
   );
