@@ -133,7 +133,7 @@ const PARAGRAPHS = [
   {
     key: "p2", num: 2, category: "paragraph2", title: "Main body", pts: 5, lo: 100, hi: 160,
     reminders: [
-      "Open with PepsiCo's stock performance over the last year, using language of trends.",
+      "Open with PepsiCo's stock performance this year (2026), describing the rise-then-fall trend using language of trends.",
       "State and explain at least one strength OR weakness from the text.",
       "State and explain at least one opportunity OR threat from the text.",
       "Say whether the strengths and opportunities outweigh the weaknesses and threats.",
@@ -204,7 +204,7 @@ const WARMUP = [
     num: 1,
     prompt: "Look at the stock price chart.",
     parts: [
-      { key: "q1i", label: "(i)", text: "By approximately how much did PepsiCo's stock price change over the past year?" },
+      { key: "q1i", label: "(i)", text: "Describe the overall trend in PepsiCo's stock price this year. By approximately how much did it rise and then fall?" },
       { key: "q1ii", label: "(ii)", text: "Describe the most dramatic change you can see, using a language of trends word." }
     ]
   },
@@ -241,8 +241,8 @@ APA CITATION FOR THIS TEXT:
 - Full reference: ${APA_REFERENCE}
 
 FINANCIAL DATA SHOWN TO STUDENTS (approximate, practice only):
-- Stock price trend (YTD, live from Yahoo Finance via proxy): general downward trend from ~$175 (Oct 2024) to ~$140–145 (mid 2025), roughly a 15–20% fall.
-- General downward trend from about $175 (late 2024) to about $140–$145 (mid 2025), roughly a 15–20% fall.
+- Stock price trend (YTD 2026, live from Yahoo Finance via proxy): rose from ~$137 (Jan 2026) to a peak of ~$169 (Feb 2026), then fell steadily to ~$123 (early Oct 2026), recovering slightly to ~$135 by mid-Oct. Overall change: roughly −2% YTD but with a significant rise-then-fall pattern (~20% peak-to-trough decline from Feb to Oct).
+- The most dramatic movement: rose ~$30 from January to February peak, then fell ~$46 (about 27%) from February to early October.
 - Analyst recommendations: ${ANALYST_DATA.map(d => `${d.value}% ${d.name}`).join(", ")}. The consensus is Hold.
 
 KEY FACTS (SWOT from the text):
@@ -256,7 +256,7 @@ ${serializeContext()}
 
 PARAGRAPH STRUCTURE (what students must write):
 P1 (3 pts): Introduce PepsiCo — state its core competency and at least one major brand. End by stating agree or disagree with the analysts.
-P2 (5 pts): Open with PepsiCo's financial performance over the last year using language of trends. State and explain at least one strength OR weakness from the text. State and explain at least one opportunity OR threat from the text. State whether strengths/opportunities outweigh weaknesses/threats. Explain why you agree or disagree with the analysts, using text and own opinion.
+P2 (5 pts): Open with PepsiCo's financial performance this year (2026) using language of trends. State and explain at least one strength OR weakness from the text. State and explain at least one opportunity OR threat from the text. State whether strengths/opportunities outweigh weaknesses/threats. Explain why you agree or disagree with the analysts, using text and own opinion.
 P3 (2 pts): Restate the answer in different words. Personal opinion about PepsiCo's ability to handle future challenges.
 
 RUBRIC (20 points total):
@@ -324,9 +324,9 @@ ${serializeContext()}
 
 WARM-UP QUESTIONS AND ANSWER KEY:
 Q1 (i) By approximately how much did PepsiCo's stock price change over the past year?
-Key: The stock fell/declined by approximately 15–25% over the past year (accept any reasonable figure reflecting a downward trend, including a dollar amount of roughly $30–$35). Student must use a trend word.
+Key: The stock rose from about $137 in January to a peak of about $169 in February, then fell to about $123 by early October — a rise-then-fall pattern. YTD change is roughly −2% overall, but the peak-to-trough fall is about 27% (~$46). Accept any reasonable description of the trend (rise then fall, or focus on the overall decline since the peak). Student must use a trend word.
 Q1 (ii) Describe the most dramatic change you can see, using a language of trends word.
-Key: The most dramatic change was the gradual decline/fall from around $175 (late 2024) to around $140–$145 (mid 2025). Accept reasonable approximations with a strong trend word (a sharp drop between Oct and Dec 2024 is also acceptable).
+Key: The most dramatic change was the sustained fall from the February peak of ~$169 down to ~$123 by early October 2026 — a drop of about $46 (roughly 27%). Accept any reasonable approximation of this decline with a strong trend word (e.g. 'plummeted', 'fell sharply', 'declined steadily').
 Q2 (a) What is PepsiCo's core competency?
 Key: PepsiCo is a global food and beverage company. Core competency: manufacturing and selling food and beverage products under multiple well-known brands (Pepsi, Lay's, Tropicana, etc.). Accept any answer referencing the text.
 Q2 (b) Do you agree or disagree with the analysts' recommendation? Why? Use at least one trend word and reference the text.
