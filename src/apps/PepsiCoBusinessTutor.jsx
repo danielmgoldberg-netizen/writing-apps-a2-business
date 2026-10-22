@@ -584,12 +584,12 @@ function Collapsible({ title, subtitle, children, defaultOpen = false }) {
   const [open, setOpen] = useState(defaultOpen);
   return (
     <div className="a2-collapse">
-      <button className="a2-collapse-head" onClick={() => setOpen(o => !o)} type="button">
+      <button className="a2-collapse-head" onClick={() => setOpen(o => !o)} type="button" aria-expanded={open}>
         <span>
           {title}
           {subtitle && <span style={{ color: "#8A7B6A", fontWeight: 400 }}> · {subtitle}</span>}
         </span>
-        <span className="a2-collapse-icon">{open ? "–" : "+"}</span>
+        <span className={`a2-collapse-icon${open ? " open" : ""}`} aria-hidden="true">›</span>
       </button>
       {open && <div className="a2-collapse-body">{children}</div>}
     </div>
@@ -657,12 +657,9 @@ function WarmupResult({ result }) {
 // ─────────────────────────────────────────────────────────────────────────────
 function StockChart() {
   return (
-    <div className="a2-doc-card" style={{ flex: "1 1 340px", minWidth: 0 }}>
-      <div style={chartTitle}>📉 PepsiCo (PEP) stock price</div>
-      <div style={{ fontSize: 12, color: "#8A6F30", marginBottom: 10, lineHeight: 1.45 }}>
-        ⚠️ Approximate monthly values for practice only. Check CNN for current figures.
-      </div>
-      <div style={{ width: "100%", height: 220 }}>
+    <div className="a2-doc-card">
+      <div style={{ ...chartTitle, marginBottom: 10 }}>📉 PepsiCo (PEP) stock price</div>
+      <div style={{ width: "100%", height: 260 }}>
         <ResponsiveContainer>
           <AreaChart data={STOCK_DATA} margin={{ top: 6, right: 8, left: -12, bottom: 0 }}>
             <defs>
@@ -679,16 +676,24 @@ function StockChart() {
           </AreaChart>
         </ResponsiveContainer>
       </div>
-      <div style={{ marginTop: 10 }}>
-        <LinkButton href={CNN_QUOTE_URL}>Live stock price on CNN ↗</LinkButton>
+      <div style={{ fontSize: 12, color: "#8A7B6A", marginTop: 8, lineHeight: 1.45 }}>
+        Approximate values for reference only. Use the CNN link above for current figures.
       </div>
     </div>
   );
 }
 
+function CnnBanner() {
+  return (
+    <a href={CNN_QUOTE_URL} target="_blank" rel="noreferrer" className="a2-cnn-banner">
+      📈 View Live PepsiCo Stock Chart &amp; Analyst Recommendations on CNN →
+    </a>
+  );
+}
+
 function AnalystChart() {
   return (
-    <div className="a2-doc-card" style={{ flex: "1 1 280px", minWidth: 0 }}>
+    <div className="a2-doc-card a2-analyst-card">
       <div style={chartTitle}>🧑‍💼 Analyst recommendations</div>
       <div style={{ fontSize: 12, color: "#8A6F30", marginBottom: 10, lineHeight: 1.45 }}>
         ⚠️ Approximate breakdown. Check CNN for the current forecast.
@@ -1000,7 +1005,23 @@ export default function App({ onBack, firstName: initialFirstName = "", surname:
         padding: 11px 13px; display: flex; justify-content: space-between; align-items: center; gap: 10px;
       }
       .a2-collapse-head:hover { background: #F4EEDC; }
-      .a2-collapse-icon { color: #2D5043; font-weight: 700; font-size: 15px; flex-shrink: 0; }
+      .a2-collapse-icon {
+        color: #2D5043; font-weight: 700; font-size: 18px; line-height: 1; flex-shrink: 0;
+        display: inline-block; transition: transform 0.15s ease;
+      }
+      .a2-collapse-icon.open { transform: rotate(90deg); }
+
+      .a2-cnn-banner {
+        display: block; width: 100%; margin-bottom: 14px; padding: 14px 18px;
+        background: #2D5043; color: #FFFFFF; border-radius: 10px;
+        font-family: 'Plus Jakarta Sans', sans-serif; font-size: 15px; font-weight: 600;
+        text-align: center; text-decoration: none; line-height: 1.4;
+        transition: background 0.15s ease;
+      }
+      .a2-cnn-banner:hover { background: #234037; }
+      .a2-cnn-banner:focus-visible { outline: none; box-shadow: 0 0 0 3px rgba(45, 80, 67, 0.3); }
+
+      .a2-analyst-card { width: 50%; min-width: 300px; margin: 14px auto 0; }
       .a2-collapse-body { padding: 12px 14px; border-top: 1px solid #EDE3CE; }
 
       .a2-doc-card { background: #FDFAF2; border: 1px solid #EDE3CE; border-radius: 10px; padding: 16px 18px; }
@@ -1025,6 +1046,7 @@ export default function App({ onBack, firstName: initialFirstName = "", surname:
 
       @media (max-width: 600px) {
         .a2-card-pad { padding: 18px 16px !important; }
+        .a2-analyst-card { width: 100%; min-width: 0; }
       }
     `}</style>
   );
@@ -1109,16 +1131,15 @@ export default function App({ onBack, firstName: initialFirstName = "", surname:
         {/* CHARTS */}
         <section style={cardStyle} className="a2-card-pad">
           <h2 style={sectionH}>📊 Financial data</h2>
-          <div style={{ display: "flex", gap: 14, flexWrap: "wrap" }}>
-            <StockChart />
-            <AnalystChart />
-          </div>
+          <CnnBanner />
+          <StockChart />
+          <AnalystChart />
         </section>
 
         {/* REFERENCE */}
         <section style={cardStyle} className="a2-card-pad">
           <h2 style={sectionH}>🧰 Reference</h2>
-          <Collapsible title="🏢 Key facts" subtitle="PepsiCo SWOT" defaultOpen>
+          <Collapsible title="🏢 Key facts" subtitle="PepsiCo SWOT">
             <KeyFacts />
           </Collapsible>
           <Collapsible title="🔗 Connector bank" subtitle="one per paragraph, 3+ different">
