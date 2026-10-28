@@ -1384,14 +1384,45 @@ export default function App({ onBack, firstName: initialFirstName = "", surname:
         {/* WRITING HELP + GATED KEY FACTS */}
         <section style={cardStyle} className="a2-card-pad">
           <h2 style={sectionH}>🧰 Writing help</h2>
-          <WritingHelpTabs />
-          {attempts.length >= 1 && sessionBest < 14 && (
-            <div style={{ marginTop: 12 }}>
-              <Collapsible title="🏢 Key facts" subtitle="PepsiCo SWOT — unlocked after your first attempt" defaultOpen={true}>
+          <Collapsible title="✏️ Reference — subject-verb, connectors, trends, citation &amp; tips" subtitle="tap to open">
+            <WritingHelpTabs />
+          </Collapsible>
+          <div style={{ marginTop: 8 }}>
+            {attempts.length === 0 ? (
+              /* Before any attempt: locked placeholder, always visible */
+              <div style={{
+                display: "flex", alignItems: "center", gap: 12,
+                padding: "11px 14px",
+                background: "#F8F1E1", border: "1px solid #E3D3AE",
+                borderRadius: 9, opacity: 0.85
+              }}>
+                <span style={{ fontSize: 20, flexShrink: 0 }}>🔒</span>
+                <div>
+                  <div style={{ fontSize: 13, fontWeight: 600, color: "#8A6F30", marginBottom: 2 }}>
+                    🏢 Key facts — PepsiCo SWOT
+                  </div>
+                  <div style={{ fontSize: 12.5, color: "#6B5D54", lineHeight: 1.5 }}>
+                    Submit your essay once. If your score is below 14/20, this opens automatically to help you improve.
+                  </div>
+                </div>
+              </div>
+            ) : sessionBest >= 14 ? (
+              /* Score is good enough — no need to show key facts */
+              null
+            ) : (
+              /* After attempt 1, score below 14: unlocked and open */
+              <Collapsible
+                title="🏢 Key facts — PepsiCo SWOT"
+                subtitle="unlocked — use these to strengthen your essay"
+                defaultOpen={true}
+              >
+                <div style={{ padding: "8px 0 4px", fontSize: 12.5, color: "#2D5043", fontWeight: 600, marginBottom: 6 }}>
+                  ✅ Key facts are now available. Use them to improve your next attempt.
+                </div>
                 <KeyFacts />
               </Collapsible>
-            </div>
-          )}
+            )}
+          </div>
         </section>
 
         {/* WARM-UP */}
