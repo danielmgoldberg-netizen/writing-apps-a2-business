@@ -128,6 +128,13 @@ const PARAGRAPHS = [
       "Introduce PepsiCo and state its core competency.",
       "Mention at least one major brand.",
       "End by saying whether you agree or disagree with the analysts."
+    ],
+    checklist: [
+      "I introduced PepsiCo as a global food and beverage company.",
+      "I mentioned at least one major brand (e.g. Pepsi, Lay's, Tropicana).",
+      "I stated clearly whether I agree or disagree with the analysts.",
+      "I used a connector at the start of a sentence, followed by a comma.",
+      "Every sentence starts with a capital letter and ends with a full stop."
     ]
   },
   {
@@ -138,6 +145,15 @@ const PARAGRAPHS = [
       "State and explain at least one opportunity OR threat from the text.",
       "Say whether the strengths and opportunities outweigh the weaknesses and threats.",
       "Explain why you agree or disagree with the analysts. Use the text and your own opinion, with an APA citation."
+    ],
+    checklist: [
+      "I opened with PepsiCo's stock price trend this year, using a trend word.",
+      "I stated AND explained at least one strength or weakness from the text.",
+      "I stated AND explained at least one opportunity or threat from the text.",
+      "I said whether strengths/opportunities outweigh weaknesses/threats.",
+      "I explained why I agree/disagree with the analysts, referencing the text.",
+      "I included a correct APA in-text citation (parenthetical or narrative).",
+      "I used a connector at the start of a sentence, followed by a comma."
     ]
   },
   {
@@ -146,6 +162,12 @@ const PARAGRAPHS = [
       "Restate your answer in different words.",
       "Give your personal opinion about PepsiCo's ability to handle future challenges.",
       "Do not add new arguments."
+    ],
+    checklist: [
+      "I restated my agree/disagree position in different words (not copied from P1).",
+      "I gave my personal opinion about PepsiCo's ability to handle future challenges.",
+      "I did NOT add any new arguments or evidence.",
+      "I used a connector at the start of a sentence, followed by a comma."
     ]
   }
 ];
@@ -776,19 +798,226 @@ function WordBank({ groups }) {
   );
 }
 
-function CitationGuide() {
+// CitationGuide replaced by CiteTab in WritingHelpTabs
+
+// ─────────────────────────────────────────────────────────────────────────────
+// WRITING HELP — TAB DATA
+// ─────────────────────────────────────────────────────────────────────────────
+const SVA_ROWS = [
+  { subject: "PepsiCo (one company)", rule: "singular", correct: "PepsiCo <strong>has</strong> invested in healthier products.", wrong: "PepsiCo <u>have</u> invested in healthier products." },
+  { subject: "The company (singular)", rule: "singular", correct: "The company <strong>is</strong> expanding its product range.", wrong: "The company <u>are</u> expanding its product range." },
+  { subject: "Analysts (plural)", rule: "plural", correct: "Analysts <strong>recommend</strong> holding PepsiCo shares.", wrong: "Analysts <u>recommends</u> holding PepsiCo shares." },
+  { subject: "Each brand (each + singular)", rule: "singular", correct: "Each brand <strong>targets</strong> a different consumer group.", wrong: "Each brand <u>target</u> a different consumer group." },
+  { subject: "Investors (plural)", rule: "plural", correct: "Investors <strong>are</strong> watching the stock price.", wrong: "Investors <u>is</u> watching the stock price." },
+  { subject: "Nooyi (one person)", rule: "singular", correct: "Nooyi <strong>argues</strong> that purpose drives profit.", wrong: "Nooyi <u>argue</u> that purpose drives profit." },
+  { subject: "The strengths (plural)", rule: "plural", correct: "The strengths <strong>outweigh</strong> the weaknesses.", wrong: "The strengths <u>outweighs</u> the weaknesses." }
+];
+
+const PEPSICO_TIPS = [
+  {
+    title: "Start strong — your P1 claim matters",
+    body: "Your first paragraph must do three things: introduce PepsiCo as a global food and beverage company, mention at least one major brand (Pepsi, Lay's, Tropicana…), and state clearly whether you agree or disagree with the analysts. Don't just describe the company — end with your position."
+  },
+  {
+    title: "Open P2 with trends language",
+    body: "The first sentence of P2 should describe PepsiCo's stock price movement this year using a language-of-trends word. For example: 'PepsiCo's stock rose sharply from around $137 in January to a peak of $169 in February, before falling steadily to around $123 by October.' You get a point just for doing this — don't skip it."
+  },
+  {
+    title: "SWOT in P2 — explain, don't just list",
+    body: "You must mention at least one strength OR weakness AND at least one opportunity OR threat from the text. It's not enough to name them — explain why each one matters for PepsiCo. For example: 'PepsiCo reduced salt and sugar in its products, which is a strength because it aligns with growing consumer demand for healthier food.'"
+  },
+  {
+    title: "APA citation — find it in the source line",
+    body: "You need exactly one in-text APA citation. Everything you need is in the source line below the text: the author names and the year. You can use parenthetical form (at the end of a sentence) or narrative form (the author's name as part of your sentence). Get the punctuation exactly right — a missing comma or wrong bracket type loses the point."
+  },
+  {
+    title: "One connector per paragraph — used correctly",
+    body: "You need at least three different connectors, one in each paragraph. Choose from the Connector bank. The connector must come at the start of a sentence and must be followed by a comma — for example: 'However, PepsiCo still faces...' or 'Furthermore, the company has...' A connector buried in the middle of a sentence does not count."
+  },
+  {
+    title: "P3 = restatement + opinion on the future",
+    body: "Your conclusion should do two things: restate your agree/disagree position in different words (don't copy P1), and give your personal opinion about PepsiCo's ability to handle future challenges. Do NOT introduce new arguments or evidence here. Keep it short — 35 to 60 words is exactly right."
+  },
+  {
+    title: "Sentence and paragraph format",
+    body: "Every sentence must start with a capital letter and end with a full stop. 'I' is always capitalised. Proper nouns — PepsiCo, Nooyi, Govindarajan, Tropicana, Lay's — must always be capitalised. Three clear separate paragraphs are required; do not run them together."
+  },
+  {
+    title: "Stock price and percentage formatting",
+    body: "When writing about numbers, use the dollar sign: '$169', not '169 dollars'. For percentages: '27%', not '27 percent'. For approximate figures, you can write 'around $169' or 'approximately $137'. The grader checks that you describe the stock trend correctly — include both the rise and the fall."
+  }
+];
+
+// ─────────────────────────────────────────────────────────────────────────────
+// WRITING HELP — TAB COMPONENTS
+// ─────────────────────────────────────────────────────────────────────────────
+function SvaTab() {
   return (
-    <div className="a2-body-text">
-      <div style={{ marginBottom: 6 }}>✅ Parenthetical: <strong>(Nooyi &amp; Govindarajan, 2020)</strong></div>
-      <div style={{ marginBottom: 6 }}>✅ Narrative: <strong>Nooyi and Govindarajan (2020)</strong> explain / state / argue / write…</div>
-      <div style={{ marginBottom: 10, color: "#B4472B" }}>
-        ❌ (Nooyi &amp; Govindarajan 2020) · (Nooyi and Govindarajan, 2020) · [Nooyi &amp; Govindarajan, 2020]
+    <div>
+      <div style={{ fontFamily: "'Fraunces', serif", fontSize: 17, fontWeight: 600, color: "#1F1B16", marginBottom: 6 }}>
+        Subject-verb agreement
       </div>
-      <div style={kickerStyle}>Full reference</div>
-      <div style={{ paddingLeft: 24, textIndent: -24, fontSize: 13 }}>
-        Nooyi, I. K., &amp; Govindarajan, V. (2020, March–April). Becoming a better corporate citizen: How PepsiCo moved
-        toward a healthier future. <em>Harvard Business Review</em>.{" "}
-        <a href={APA_URL} target="_blank" rel="noreferrer" className="a2-link" style={{ wordBreak: "break-word" }}>{APA_URL}</a>
+      <div style={{ fontSize: 13, color: "#3A332C", marginBottom: 14, lineHeight: 1.6 }}>
+        The verb must <strong>match</strong> the subject — singular subjects take singular verbs; plural subjects take plural verbs.
+      </div>
+      <div style={{ background: "#E8EFE9", border: "1px solid #B5C9B8", borderRadius: 8, padding: "10px 14px", marginBottom: 14, fontSize: 13, lineHeight: 1.7, color: "#1F1B16" }}>
+        <strong>Quick rule:</strong> If the subject ends in -s (plural), the verb usually does NOT end in -s. If the subject has no -s (singular), the verb usually DOES end in -s.<br />
+        Example: <em>Analysts recommend</em> · <em>The company recommends</em>
+      </div>
+      <div style={{ overflowX: "auto" }}>
+        <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 12.5 }}>
+          <thead>
+            <tr style={{ background: "#F4EEDC", borderBottom: "2px solid #DDD2BC" }}>
+              <th style={{ padding: "7px 10px", textAlign: "left", color: "#2D5043", fontWeight: 700, fontSize: 11.5, textTransform: "uppercase", letterSpacing: "0.05em" }}>Subject</th>
+              <th style={{ padding: "7px 10px", textAlign: "left", color: "#2D5043", fontWeight: 700, fontSize: 11.5, textTransform: "uppercase", letterSpacing: "0.05em" }}>Rule</th>
+              <th style={{ padding: "7px 10px", textAlign: "left", color: "#2D5043", fontWeight: 700, fontSize: 11.5, textTransform: "uppercase", letterSpacing: "0.05em" }}>✅ Correct</th>
+              <th style={{ padding: "7px 10px", textAlign: "left", color: "#B4472B", fontWeight: 700, fontSize: 11.5, textTransform: "uppercase", letterSpacing: "0.05em" }}>❌ Wrong</th>
+            </tr>
+          </thead>
+          <tbody>
+            {SVA_ROWS.map((r, i) => (
+              <tr key={i} style={{ borderTop: "1px solid #EDE3CE", background: i % 2 === 0 ? "#FFFFFF" : "#FDFAF2" }}>
+                <td style={{ padding: "7px 10px", color: "#1F1B16", verticalAlign: "top" }}>{r.subject}</td>
+                <td style={{ padding: "7px 10px", color: "#6B5D54", fontStyle: "italic", verticalAlign: "top" }}>{r.rule}</td>
+                <td style={{ padding: "7px 10px", color: "#1F1B16", verticalAlign: "top" }} dangerouslySetInnerHTML={{ __html: r.correct }} />
+                <td style={{ padding: "7px 10px", color: "#B4472B", verticalAlign: "top" }} dangerouslySetInnerHTML={{ __html: r.wrong }} />
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <div style={{ marginTop: 14, padding: "10px 12px", background: "#FBF1E5", border: "1px solid #E8C9A8", borderRadius: 8, fontSize: 12.5, color: "#7A3818" }}>
+        ✋ <strong>Watch out:</strong> "PepsiCo have" and "The company are" are very common errors. Treat any company name or "the company" as singular.
+      </div>
+    </div>
+  );
+}
+
+function ConnTab() {
+  return (
+    <div>
+      <div style={{ fontFamily: "'Fraunces', serif", fontSize: 17, fontWeight: 600, color: "#1F1B16", marginBottom: 10 }}>
+        Connector bank
+      </div>
+      <div style={{ fontSize: 13, color: "#3A332C", marginBottom: 14, lineHeight: 1.6 }}>
+        Use <strong>one connector per paragraph</strong> (at least 3 different ones across the essay). Place it at the <strong>start of a sentence</strong> followed by a comma.
+      </div>
+      <WordBank groups={CONNECTOR_GROUPS} />
+      <div style={{ marginTop: 14, padding: "10px 12px", background: "#FBF1E5", border: "1px solid #E8C9A8", borderRadius: 8, fontSize: 12.5, color: "#7A3818" }}>
+        ✋ <strong>Punctuation matters:</strong> "However, PepsiCo…" ✓  &nbsp; "However PepsiCo…" ✗ — a missing comma after a sentence-initial connector loses the point.
+      </div>
+    </div>
+  );
+}
+
+function TrendsTab() {
+  return (
+    <div>
+      <div style={{ fontFamily: "'Fraunces', serif", fontSize: 17, fontWeight: 600, color: "#1F1B16", marginBottom: 10 }}>
+        Language of trends
+      </div>
+      <div style={{ fontSize: 13, color: "#3A332C", marginBottom: 14, lineHeight: 1.6 }}>
+        Use a <strong>trend verb</strong> in Paragraph 2 to describe PepsiCo's stock price movement. You can also add a <strong>modifier</strong> to describe how dramatic the change was.
+      </div>
+      <WordBank groups={TREND_GROUPS} />
+      <div style={{ marginTop: 10, padding: "12px 14px", background: "#E8EFE9", border: "1px solid #B5C9B8", borderRadius: 8, fontSize: 13, color: "#1F1B16", lineHeight: 1.65 }}>
+        <strong>Tip:</strong> Combine a trend verb with an adverb to describe the change more precisely — for example, "rose <em>sharply</em>", "<em>gradually</em> declined", "<em>significantly</em> increased".
+      </div>
+    </div>
+  );
+}
+
+function CiteTab() {
+  return (
+    <div>
+      <div style={{ fontFamily: "'Fraunces', serif", fontSize: 17, fontWeight: 600, color: "#1F1B16", marginBottom: 10 }}>
+        APA in-text citation
+      </div>
+      <div style={{ fontSize: 13, color: "#3A332C", marginBottom: 14, lineHeight: 1.6 }}>
+        You need <strong>one in-text citation</strong> for the exam text. Everything you need is in the <strong>Source</strong> line below the text in Step 1 — the authors' last names and the year of publication.
+      </div>
+      <div style={{ display: "flex", flexDirection: "column", gap: 10, marginBottom: 14 }}>
+        <div style={{ background: "#FDFAF2", border: "1px solid #EDE3CE", borderRadius: 8, padding: "12px 14px" }}>
+          <div style={{ fontSize: 11.5, color: "#2D5043", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.06em", marginBottom: 6 }}>Parenthetical form</div>
+          <div style={{ fontSize: 13, color: "#3A332C", lineHeight: 1.6 }}>
+            Both author names AND the year sit inside round brackets at the end of your sentence. Recall how to punctuate this from class.
+          </div>
+        </div>
+        <div style={{ background: "#FDFAF2", border: "1px solid #EDE3CE", borderRadius: 8, padding: "12px 14px" }}>
+          <div style={{ fontSize: 11.5, color: "#2D5043", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.06em", marginBottom: 6 }}>Narrative form</div>
+          <div style={{ fontSize: 13, color: "#3A332C", lineHeight: 1.6 }}>
+            The authors' names appear as part of your sentence; the year follows in round brackets right after the names.
+          </div>
+        </div>
+      </div>
+      <div style={{ padding: "10px 12px", background: "#FBF1E5", border: "1px solid #E8C9A8", borderRadius: 8, fontSize: 12.5, color: "#7A3818", lineHeight: 1.55 }}>
+        ✋ APA has strict punctuation rules. Pay close attention to round brackets, the ampersand (&amp;) vs. "and", the comma, and where the period goes. Get any of those wrong and the citation point is lost.
+      </div>
+    </div>
+  );
+}
+
+function TipsTab() {
+  const [open, setOpen] = useState(null);
+  return (
+    <div>
+      <div style={{ fontSize: 12.5, color: "#6B5D54", marginBottom: 12, lineHeight: 1.5 }}>
+        Click any tip to read it. Study these <strong>before</strong> you write your essay.
+      </div>
+      {PEPSICO_TIPS.map((tip, i) => (
+        <div key={i} style={{ border: "1px solid #EDE3CE", borderRadius: 9, marginBottom: 7, overflow: "hidden" }}>
+          <button
+            onClick={() => setOpen(open === i ? null : i)}
+            style={{
+              width: "100%", background: open === i ? "#F4EEDC" : "#FDFAF2", border: "none",
+              padding: "11px 14px", display: "flex", alignItems: "center", justifyContent: "space-between",
+              cursor: "pointer", textAlign: "left", fontFamily: "'Plus Jakarta Sans', sans-serif"
+            }}
+          >
+            <span style={{ fontSize: 13.5, fontWeight: 600, color: "#1F1B16" }}>{tip.title}</span>
+            <span style={{ color: "#2D5043", fontWeight: 700, transform: open === i ? "rotate(180deg)" : "none", transition: "transform 0.2s ease", flexShrink: 0, marginLeft: 8 }}>▾</span>
+          </button>
+          {open === i && (
+            <div style={{ padding: "10px 14px 14px", background: "#F4EEDC", fontSize: 13.5, color: "#3A332C", lineHeight: 1.7, whiteSpace: "pre-line" }}>
+              {tip.body}
+            </div>
+          )}
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function WritingHelpTabs() {
+  const [tab, setTab] = useState("sva");
+  const tabs = [
+    { id: "sva",    label: "📝 Subject-Verb" },
+    { id: "conn",   label: "🔗 Connectors" },
+    { id: "trends", label: "📈 Trends" },
+    { id: "cite",   label: "📚 Citation" },
+    { id: "tips",   label: "💡 Tips" }
+  ];
+  return (
+    <div style={{ border: "1px solid #E8E0D0", borderRadius: 10, overflow: "hidden", marginTop: 4 }}>
+      <div style={{ display: "flex", borderBottom: "1px solid #E8E0D0", overflowX: "auto", background: "#FDFAF2" }}>
+        {tabs.map(t => (
+          <button key={t.id} onClick={() => setTab(t.id)} style={{
+            padding: "11px 14px", border: "none",
+            background: tab === t.id ? "#FFFFFF" : "transparent",
+            color: tab === t.id ? "#2D5043" : "#6B5D54",
+            fontFamily: "'Plus Jakarta Sans', sans-serif", fontSize: 12.5,
+            fontWeight: tab === t.id ? 700 : 500, cursor: "pointer", whiteSpace: "nowrap",
+            borderBottom: tab === t.id ? "2px solid #2D5043" : "2px solid transparent",
+            transition: "all 0.15s ease", letterSpacing: "0.01em"
+          }}>{t.label}</button>
+        ))}
+      </div>
+      <div style={{ padding: "18px 20px", background: "#FFFFFF" }}>
+        {tab === "sva"    && <SvaTab />}
+        {tab === "conn"   && <ConnTab />}
+        {tab === "trends" && <TrendsTab />}
+        {tab === "cite"   && <CiteTab />}
+        {tab === "tips"   && <TipsTab />}
       </div>
     </div>
   );
@@ -1152,21 +1381,17 @@ export default function App({ onBack, firstName: initialFirstName = "", surname:
           <AnalystChart />
         </section>
 
-        {/* REFERENCE */}
+        {/* WRITING HELP + GATED KEY FACTS */}
         <section style={cardStyle} className="a2-card-pad">
-          <h2 style={sectionH}>🧰 Reference</h2>
-          <Collapsible title="🏢 Key facts" subtitle="PepsiCo SWOT">
-            <KeyFacts />
-          </Collapsible>
-          <Collapsible title="🔗 Connector bank" subtitle="one per paragraph, 3+ different">
-            <WordBank groups={CONNECTOR_GROUPS} />
-          </Collapsible>
-          <Collapsible title="📈 Trends bank" subtitle="use in Paragraph 2">
-            <WordBank groups={TREND_GROUPS} />
-          </Collapsible>
-          <Collapsible title="📚 APA citation" subtitle="how to cite the text">
-            <CitationGuide />
-          </Collapsible>
+          <h2 style={sectionH}>🧰 Writing help</h2>
+          <WritingHelpTabs />
+          {attempts.length >= 1 && sessionBest < 14 && (
+            <div style={{ marginTop: 12 }}>
+              <Collapsible title="🏢 Key facts" subtitle="PepsiCo SWOT — unlocked after your first attempt" defaultOpen={true}>
+                <KeyFacts />
+              </Collapsible>
+            </div>
+          )}
         </section>
 
         {/* WARM-UP */}
@@ -1253,6 +1478,17 @@ export default function App({ onBack, firstName: initialFirstName = "", surname:
                 ))}
               </ul>
 
+              <details style={{ marginBottom: 10 }}>
+                <summary style={{
+                  cursor: "pointer", fontSize: 12, color: "#6B5D54", fontWeight: 600,
+                  letterSpacing: "0.04em", textTransform: "uppercase", userSelect: "none", listStyle: "none"
+                }}>
+                  ✓ Checklist for this paragraph
+                </summary>
+                <ul style={{ margin: "6px 0 4px 0", paddingLeft: 20, fontSize: 13, color: "#3A332C", lineHeight: 1.65 }}>
+                  {(para.checklist || []).map((c, i) => <li key={i}>{c}</li>)}
+                </ul>
+              </details>
               <textarea
                 className="mit-textarea"
                 style={{ minHeight: para.key === "p2" ? 230 : 130 }}
